@@ -1,0 +1,44 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<!-- <http>
+		<intercept-url pattern="/getAllStud*" access="ROLE_USER" />
+		<http-basic />
+	</http> -->
+	
+	<!-- <http>
+		<intercept-url pattern="/getAllStud*" access="ROLE_USER" />
+		<form-login/>
+		<logout logout-success-url="/home" />
+	</http> -->
+
+	<http>
+		<intercept-url pattern="/register" access="ROLE_USER" />
+		<intercept-url pattern="/getAllStudDetails" access="ROLE_ADMIN" />
+		<form-login login-page="/login" default-target-url="/home" authentication-failure-url="/loginFail"
+		username-parameter="name"
+		password-parameter="password" />
+		<logout logout-success-url="/home" />
+	</http> 
+	
+	<!-- <authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="Rahul" password="123" authorities="ROLE_USER" />
+				<user name="Virat" password="456" authorities="ROLE_USER" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager> -->
+
+	
+	<authentication-manager>
+		<authentication-provider>
+		<jdbc-user-service data-source-ref="dataSource" authorities-by-username-query ="SELECT us.email, us.role FROM spring.student us where email=?"
+			users-by-username-query="SELECT us.email, us.password, true FROM spring.student us where email=?" />
+		</authentication-provider>
+	</authentication-manager>
+</beans:beans>
